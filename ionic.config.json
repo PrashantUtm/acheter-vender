@@ -1,0 +1,7 @@
+{
+  "name": "acheter-vender",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
