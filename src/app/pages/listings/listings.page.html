@@ -1,0 +1,19 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Acheter-vender</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let listing of allListings">
+      <ion-card>
+        <img [alt]="listing.title" [src]="listing.picture" />
+        <ion-card-header>
+          <ion-card-title>{{ listing.title }}</ion-card-title>
+          <ion-card-subtitle>Rs. {{ listing.price }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </ion-item>
+  </ion-list>
+</ion-content>
