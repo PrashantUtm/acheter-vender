@@ -1,0 +1,10 @@
+<ion-card>
+  <img [alt]="listing?.title" [src]="listing?.picture" />
+  <ion-card-header>
+    <ion-card-title>{{ listing?.title }}</ion-card-title>
+    <ion-card-subtitle>Rs. {{ listing?.price }}</ion-card-subtitle>
+    <div>
+      <ion-label>Added on {{ listing?.dateAdded | date:'dd/MM/yyyy' }}</ion-label>
+    </div>
+  </ion-card-header>
+</ion-card>

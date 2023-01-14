@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Listing } from 'src/app/interfaces/listing';
 import { ListingsService } from 'src/app/services/listings.service';
 
@@ -14,8 +15,11 @@ export class ListingsPage implements OnInit {
   constructor(private listingsService: ListingsService) { }
 
   ngOnInit() {
-    this.allListings = this.listingsService.getAllListings();
-    console.log('all listings:', this.allListings);
+    //this.allListings = this.listingsService.getAllListings();
+    this.listingsService.getAllListings().subscribe((listings) => {
+      this.allListings = listings;
+      console.log('all listings:', this.allListings);
+    });
   }
 
 }

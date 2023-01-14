@@ -9,7 +9,14 @@ const routes: Routes = [
   },
   {
     path: 'listings',
-    loadChildren: () => import('./pages/listings/listings.module').then( m => m.ListingsPageModule)
+    children: [
+      { path: '', loadChildren: () => import('./pages/listings/listings.module').then( m => m.ListingsPageModule) },
+      { path: ':listingid', loadChildren: () => import('./pages/listing-details/listing-details.module').then( m => m.ListingDetailsPageModule) }
+    ]
+  },
+  {
+    path: 'new-listing',
+    loadChildren: () => import('./pages/new-listing/new-listing.module').then( m => m.NewListingPageModule)
   },
 ];
 

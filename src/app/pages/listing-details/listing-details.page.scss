@@ -1,0 +1,80 @@
+ion-footer {
+    ion-row {
+        padding: 0;
+
+        ion-col {
+            padding: 0;
+
+            ion-button {
+                margin: 0;
+                height: 50px;
+                font-size: 18px;
+                box-shadow: none;
+            }
+        }
+    }
+}
+
+.description {
+    h5 {
+        color: #2a2a2a;
+        padding-top: 10px;
+    }
+
+    p {
+        color: #656565;
+    }
+}
+
+.item-name {
+    color: #2a2a2a;
+}
+
+.category {
+    color: #656565;
+}
+
+.available {
+    color: green;
+}
+.sold, .out-of-stock {
+    color: red;
+}
+.unknown {
+    color: grey;
+}
+
+
+
+.price {
+    color: var(--ion-color-primary);
+
+    span {
+        color: #2a2a2a;
+        text-decoration: line-through;
+        margin-left: 20px;
+        font-size: medium;
+        vertical-align: top;
+    }
+}
+
+.seperator {
+    hr {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background: #e2e2e2;
+    }
+}
+
+.review {
+    margin-top: 16px;
+    color: #2a2a2a;
+    .count {
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        color: var(--ion-color-primary);
+    }
+}

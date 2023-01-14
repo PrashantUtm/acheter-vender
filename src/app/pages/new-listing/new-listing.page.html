@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>New Listing</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>What would you like to sell?</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="listingForm" (onSubmit)="addListing()">
+        <ion-item>
+          <ion-label position="floating">Title</ion-label>
+          <ion-input type="text" formControlName="title"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Price (Rs)</ion-label>
+          <ion-input type="number" formControlName="price"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Category</ion-label>
+          <ion-select formControlName="category">
+            <ion-select-option *ngFor="let category of categories" [value]="category">{{ category }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Description</ion-label>
+          <ion-textarea formControlName="description" placeholder="Write a description of the product you're selling and specify anything that may be of interest to potential buyers."></ion-textarea>
+        </ion-item>
+      </form>
+      <div class="ion-text-end">
+        <ion-button (click)="addListing()">
+          <ion-icon name="add" slot="start"></ion-icon>
+          Add
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -1,0 +1,82 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="listings"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ listing?.title }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding-vertical ion-padding-horizontal">
+  <ion-slides pager="true" class="product-slider">
+    <ion-slide>
+      <img [src]="listing?.picture" />
+    </ion-slide>
+  </ion-slides>
+  <div class="seperator">
+    <hr>
+  </div>
+  <div class="ion-padding-vertical">
+    <h1 class="item-name">{{ listing?.title }}</h1>
+    <ion-row>
+      <ion-col size=8>
+        <h4 class="category">{{ listing?.category }}</h4>
+        <h4 class="price">
+          Rs. {{ listing?.price }}
+        </h4>
+      </ion-col>
+      <ion-col size="4">
+        <h4 [ngClass]="getClassForStatus()">
+          {{ getLabelForStatus() }}
+        </h4>
+      </ion-col>
+    </ion-row>
+    
+    
+  </div>
+
+  <div class="seperator">
+    <hr>
+  </div>
+
+  <div class="review">
+    <ion-row>
+      <ion-col size="6">
+        {{ listing?.condition }}
+      </ion-col>
+      <ion-col size="6">
+        <div class="count">{{ listing?.interestedBuyers?.length }} interested</div>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div class="seperator">
+    <hr>
+  </div>
+
+  <div class="description">
+    <h5>Description</h5>
+
+    <p>
+      {{ listing?.description }}
+    </p>
+    <p>
+      Added on {{ listing?.dateAdded | date:'dd/MM/yyyy' }}
+    </p>
+
+  </div>
+
+  <div class="seperator">
+    <hr>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-row>
+    <ion-col size="6">
+      <ion-button expand="full" color="light">I am interested</ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button expand="full">Call seller</ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
