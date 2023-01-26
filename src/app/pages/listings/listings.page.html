@@ -1,14 +1,22 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Acheter-vender</ion-title>
+    <ion-toggle slot="end" [(ngModel)]="showFilteredByAvailableList" (ionChange)="setListings()"></ion-toggle>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let listing of allListings">
-      <app-listing [listing]="listing" [routerLink]="[listing.id]"></app-listing>
-    </ion-item>
+    <ion-item-sliding *ngFor="let listing of allListings">
+      <ion-item>
+        <app-listing [listing]="listing" [routerLink]="[listing.id]"></app-listing>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="success" (click)="callSeller(listing.seller)" expandable>
+          <ion-icon name="call" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
   </ion-list>
   <ion-fab slot="fixed" horizontal="end" vertical="bottom" [routerLink]="['/new-listing']">
     <ion-fab-button>
