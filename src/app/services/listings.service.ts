@@ -29,4 +29,12 @@ export class ListingsService {
   public getCategories(): Observable<string[]> {
     return this.http['get'](`${environment.baseUrl}categories`) as Observable<string[]>;
   }
+
+  public updateListing(listing: Listing): Observable<Listing> {
+    return this.http['put'](`${environment.baseUrl}listings/${listing.id}`, listing) as Observable<Listing>;
+  }
+
+  public getNextListingId(): string {
+    return crypto.randomUUID();
+  }
 }

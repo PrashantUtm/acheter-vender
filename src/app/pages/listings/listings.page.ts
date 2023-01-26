@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router, RouterEvent } from '@angular/router';
+import { filter } from 'rxjs';
 import { Listing } from 'src/app/interfaces/listing';
 import { ListingsService } from 'src/app/services/listings.service';
 
@@ -12,10 +13,23 @@ export class ListingsPage implements OnInit {
 
   public allListings: Listing[] = [];
 
-  constructor(private listingsService: ListingsService) { }
+  constructor(
+    private listingsService: ListingsService,
+    private router: Router
+    ) { }
 
   ngOnInit() {
-    //this.allListings = this.listingsService.getAllListings();
+    this.router.events.pipe(
+      filter((event: RouterEvent) => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      console.log('navigated back');
+      this.setListings();
+    });
+    console.log('ngOnInit');
+    this.setListings();
+  }
+
+  private setListings() : void {
     this.listingsService.getAllListings().subscribe((listings) => {
       this.allListings = listings;
       console.log('all listings:', this.allListings);

@@ -1,6 +1,9 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ListingsService } from 'src/app/services/listings.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-new-listing',
@@ -14,7 +17,10 @@ export class NewListingPage implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private listingsService: ListingsService
+    private listingsService: ListingsService,
+    private router: Router,
+    private userService: UserService,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -23,22 +29,27 @@ export class NewListingPage implements OnInit {
     });
 
     this.listingForm = this.formBuilder.group({
-      id: ['5'],
-      title: [''],
+      id: [this.listingsService.getNextListingId()],
+      title: ['', [Validators.required, Validators.minLength(5)]],
       dateAdded: [new Date()],
-      description: [''],
-      price: [''],
-      category: [''],
+      description: ['', Validators.required],
+      price: ['', Validators.required],
+      category: ['', Validators.required],
+      condition: [''],
       status: ['Available'],
+      seller: [this.userService.getCurrentUserId()],
       picture: ['https://cdn.vectorstock.com/i/preview-1x/65/30/default-image-icon-missing-picture-page-vector-40546530.jpg']
     });
   }
 
   public addListing() {
-    console.log('Listing form: ', this.listingForm.value);
-    this.listingsService.addListing(this.listingForm.value).subscribe(() => {
-      console.log('added');
-    });
+    console.log('Listing form: ', this.listingForm);
+    if (this.listingForm.valid) {
+      this.listingsService.addListing(this.listingForm.value).subscribe(() => {
+        this.listingForm.reset();
+        this.location.back();
+      });
+    }
   }
 
 }

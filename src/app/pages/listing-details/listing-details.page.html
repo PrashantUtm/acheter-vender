@@ -71,12 +71,19 @@
   </div>
 </ion-content>
 <ion-footer>
-  <ion-row>
+  <ion-row *ngIf="!isSellerLoggedIn">
     <ion-col size="6">
-      <ion-button expand="full" color="light">I am interested</ion-button>
+      <ion-button expand="full" color="light" (click)="updateInterest()">
+        {{ isCurrentUserInterested() ? 'Retract interest' : 'I am interested' }}
+      </ion-button>
     </ion-col>
     <ion-col size="6">
-      <ion-button expand="full">Call seller</ion-button>
+      <ion-button expand="full" (click)="callSeller()">Call seller</ion-button>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="isSellerLoggedIn">
+    <ion-col>
+      <ion-button expand="full" (click)="openUpdateStatusModal()">Update status</ion-button>
     </ion-col>
   </ion-row>
 </ion-footer>
