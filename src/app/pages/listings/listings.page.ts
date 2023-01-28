@@ -3,6 +3,7 @@ import { NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { filter } from 'rxjs';
 import { Listing } from 'src/app/interfaces/listing';
 import { User } from 'src/app/interfaces/user';
+import { CacheKeys, CachingService } from 'src/app/services/caching.service';
 import { ListingsService } from 'src/app/services/listings.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -18,6 +19,7 @@ export class ListingsPage implements OnInit {
   private users: User[];
 
   constructor(
+    private cachingService: CachingService,
     private listingsService: ListingsService,
     private userService: UserService,
     private router: Router
@@ -40,12 +42,21 @@ export class ListingsPage implements OnInit {
     window.open(`tel:${sellerContactNumber}`);
   }
 
-  public setListings() : void {
+  public async setListings() : Promise<void> {
+    const listings = await this.cachingService.get<Listing[]>(CacheKeys.Listings);
+    if(listings) {
+      this.allListings = listings;
+      console.log('listings set from cache');
+    }
+
     this.listingsService.getAllListings().subscribe((listings) => {
-      this.allListings = this.showFilteredByAvailableList 
-        ? listings.filter(l => (l.status.toString()) === 'Available')
-        : listings;
-      console.log('all listings:', this.allListings);
+      if (listings) {
+        this.cachingService.set(CacheKeys.Listings, listings);
+        this.allListings = this.showFilteredByAvailableList 
+          ? listings.filter(l => (l.status.toString()) === 'Available')
+          : listings;
+        console.log('all listings:', this.allListings);
+      }
     });
   }
 

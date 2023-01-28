@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { CacheKeys, CachingService } from 'src/app/services/caching.service';
 import { ListingsService } from 'src/app/services/listings.service';
 import { UserService } from 'src/app/services/user.service';
 
@@ -16,18 +17,13 @@ export class NewListingPage implements OnInit {
   public categories: string[] = [];
 
   constructor(
+    private cachingService: CachingService,
     private formBuilder: FormBuilder,
     private listingsService: ListingsService,
     private router: Router,
     private userService: UserService,
     private location: Location
-  ) { }
-
-  ngOnInit() {
-    this.listingsService.getCategories().subscribe((categories) => {
-      this.categories = categories;
-    });
-
+  ) { 
     this.listingForm = this.formBuilder.group({
       id: [this.listingsService.getNextListingId()],
       title: ['', [Validators.required, Validators.minLength(5)]],
@@ -39,6 +35,18 @@ export class NewListingPage implements OnInit {
       status: ['Available'],
       seller: [this.userService.getCurrentUserId()],
       picture: ['https://cdn.vectorstock.com/i/preview-1x/65/30/default-image-icon-missing-picture-page-vector-40546530.jpg']
+    });
+  }
+
+  async ngOnInit() {
+    const categories = await this.cachingService.get<string[]>(CacheKeys.Categories);
+    if(categories) {
+      this.categories = categories;
+    }
+
+    this.listingsService.getCategories().subscribe(async (categories) => {
+      this.categories = categories;
+      await this.cachingService.set(CacheKeys.Categories, categories);
     });
   }
 
