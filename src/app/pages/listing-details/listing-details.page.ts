@@ -1,6 +1,8 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { NativeGeocoderOptions, NativeGeocoder, NativeGeocoderResult } from '@awesome-cordova-plugins/native-geocoder/ngx';
+import { Geolocation } from '@capacitor/geolocation';
+import { ActionSheetController, ModalController } from '@ionic/angular';
 import { Status } from 'src/app/enums/status';
 import { Listing } from 'src/app/interfaces/listing';
 import { User } from 'src/app/interfaces/user';
@@ -23,9 +25,11 @@ export class ListingDetailsPage implements OnInit {
   private updateStatusEventEmitter = new EventEmitter<Status>();
 
   constructor(
+    private actionSheetCtrl: ActionSheetController,
     private activatedRoute: ActivatedRoute,
     private listingsService: ListingsService,
     private modalController: ModalController,
+    private nativeGeocoder: NativeGeocoder,
     private userService: UserService) { }
 
   ngOnInit() {
@@ -77,6 +81,10 @@ export class ListingDetailsPage implements OnInit {
     return this.listing?.interestedBuyers?.includes(this.userService.getCurrentUserId());
   }
 
+  public isPickupLocationSet(): boolean {
+    return this.listing?.pickupLocation && this.listing?.pickupLocation !== "";
+  }
+
   public updateInterest(): void {
     const userIdIndex = this.listing.interestedBuyers.indexOf(this.userService.getCurrentUserId());
     if( userIdIndex === -1) {
@@ -95,6 +103,60 @@ export class ListingDetailsPage implements OnInit {
       }
     });
     modal.present();
+  }
+
+  public async presentUpdateLocationActionSheet() {
+    const actionSheet = await this.actionSheetCtrl.create({
+      header: 'Update pickup location',
+      subHeader: 'Would you like to update the pick up location to your current location?',
+      buttons: [
+        {
+          text: 'Update location',
+          role: 'update',
+          handler: async () => await this.updateLocation()
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          data: {
+            action: 'cancel',
+          },
+        },
+      ],
+    });
+
+    await actionSheet.present();
+  }
+
+  public getListingImage(): string {
+    if(this.listing)
+    {
+      return this.listing.picture.startsWith('https://')
+        ? this.listing.picture
+        : `data:image/jpeg;base64,${this.listing.picture}`;
+    }
+    return '';
+  }
+
+  private async updateLocation(): Promise<void> {
+    const coordinates = await Geolocation.getCurrentPosition();
+    console.log('Update location:', coordinates);
+    this.listing.pickupLocation = `${coordinates.coords.latitude} ${coordinates.coords.longitude}`;
+
+    const options: NativeGeocoderOptions = {
+      useLocale: true,
+      maxResults: 5
+    };
+
+    this.nativeGeocoder.reverseGeocode(
+      coordinates.coords.latitude, 
+      coordinates.coords.longitude,
+      options)
+      .then((result: NativeGeocoderResult[]) => {
+        const firstResult = result[0];
+        this.listing.pickupLocation = `${firstResult.subLocality} ${firstResult.locality}, ${firstResult.countryName} ${firstResult.postalCode}`;
+        this.updateListing();
+      }).catch((error: any) => console.log(error));
   }
 
   private updateStatus(status: Status): void {

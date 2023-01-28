@@ -50,13 +50,11 @@ export class ListingsPage implements OnInit {
     }
 
     this.listingsService.getAllListings().subscribe((listings) => {
-      if (listings) {
-        this.cachingService.set(CacheKeys.Listings, listings);
-        this.allListings = this.showFilteredByAvailableList 
-          ? listings.filter(l => (l.status.toString()) === 'Available')
-          : listings;
-        console.log('all listings:', this.allListings);
-      }
+      this.cachingService.set(CacheKeys.Listings, listings);
+      this.allListings = this.showFilteredByAvailableList 
+        ? listings.filter(l => (l.status.toString()) === 'Available')
+        : listings;
+      console.log('all listings:', this.allListings);
     });
   }
 

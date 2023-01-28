@@ -2,6 +2,8 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Camera } from '@capacitor/camera';
+import { CameraResultType } from '@capacitor/camera/dist/esm/definitions';
 import { CacheKeys, CachingService } from 'src/app/services/caching.service';
 import { ListingsService } from 'src/app/services/listings.service';
 import { UserService } from 'src/app/services/user.service';
@@ -15,6 +17,7 @@ export class NewListingPage implements OnInit {
 
   public listingForm: FormGroup;
   public categories: string[] = [];
+  public uploadedImageSource: string;
 
   constructor(
     private cachingService: CachingService,
@@ -58,6 +61,24 @@ export class NewListingPage implements OnInit {
         this.location.back();
       });
     }
+  }
+
+  public async uploadPhoto() {
+    const image = await Camera.getPhoto({
+      quality: 90,
+      allowEditing: true,
+      resultType: CameraResultType.Base64
+    });
+  
+    // image.webPath will contain a path that can be set as an image src.
+    // You can access the original file using image.path, which can be
+    // passed to the Filesystem API to read the raw data of the image,
+    // if desired (or pass resultType: CameraResultType.Base64 to getPhoto)
+    this.uploadedImageSource = `data:image/jpeg;base64,${image.base64String}`;
+  
+    // assign value to form
+    this.listingForm.patchValue({ picture: image.base64String });
+
   }
 
 }

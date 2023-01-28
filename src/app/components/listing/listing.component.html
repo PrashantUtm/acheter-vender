@@ -1,5 +1,5 @@
 <ion-card>
-  <img [alt]="listing?.title" [src]="listing?.picture" />
+  <img [alt]="listing?.title" [src]="getListingImage()" />
   <ion-card-header>
     <ion-card-title>{{ listing?.title }}</ion-card-title>
     <ion-card-subtitle>Rs. {{ listing?.price }}</ion-card-subtitle>

@@ -13,5 +13,6 @@ export interface Listing {
     category: Category,
     seller: string,
     picture: string,
-    interestedBuyers: string[]
+    interestedBuyers: string[],
+    pickupLocation: string
 }

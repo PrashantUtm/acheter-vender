@@ -3,6 +3,11 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="listings"></ion-back-button>
     </ion-buttons>
+    <ion-buttons *ngIf="isSellerLoggedIn" slot="end" (click)="presentUpdateLocationActionSheet()">
+      <ion-button>
+        <ion-icon slot="icon-only" name="location"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>{{ listing?.title }}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -10,7 +15,7 @@
 <ion-content class="ion-padding-vertical ion-padding-horizontal">
   <ion-slides pager="true" class="product-slider">
     <ion-slide>
-      <img [src]="listing?.picture" />
+      <img [src]="getListingImage()" />
     </ion-slide>
   </ion-slides>
   <div class="seperator">
@@ -48,6 +53,15 @@
         <div class="count">{{ listing?.interestedBuyers?.length }} interested</div>
       </ion-col>
     </ion-row>
+  </div>
+
+  <div class="seperator" *ngIf="isPickupLocationSet()">
+    <hr>
+  </div>
+
+  <div class="review" *ngIf="isPickupLocationSet()">
+    <h5>Pickup location</h5>
+    <p>{{ listing?.pickupLocation }}</p>
   </div>
 
   <div class="seperator">

@@ -14,4 +14,13 @@ export class ListingComponent implements OnInit {
 
   ngOnInit() {}
 
+  public getListingImage(): string {
+    if(this.listing)
+    {
+      return this.listing.picture.startsWith('https://')
+        ? this.listing.picture
+        : `data:image/jpeg;base64,${this.listing.picture}`;
+    }
+    return '';
+  }
 }

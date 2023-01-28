@@ -56,8 +56,17 @@
             Description is required.
           </ion-note>
         </ion-item>
+        <ion-item>
+          <ion-thumbnail>
+            <img alt="" [src]="uploadedImageSource" />
+          </ion-thumbnail>
+        </ion-item>
       </form>
       <div class="ion-text-end">
+        <ion-button (click)="uploadPhoto()">
+          <ion-icon name="camera" slot="start"></ion-icon>
+          Upload photo
+        </ion-button>
         <ion-button (click)="addListing()">
           <ion-icon name="add" slot="start"></ion-icon>
           Add
